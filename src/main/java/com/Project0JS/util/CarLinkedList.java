@@ -1,57 +1,57 @@
 package com.Project0JS.util;
 
-import com.Project0JS.model.User;
+import com.Project0JS.model.Car;
 
-public class UserLinkedList {
+public class CarLinkedList {
 
-    UserNode head;
-    UserNode tail;
+    CarNode head;
+    CarNode tail;
     private int size = 0;
 
-    public User get(Object s) throws ClassCastException {
+    public Car get(Object s) throws ClassCastException {
         if (!(s instanceof String)) {
-            throw new ClassCastException("Expected a username (String), got " + s.getClass());
+            throw new ClassCastException("Expected a Carname (String), got " + s.getClass());
         }
         if (head == null) {
             return null;
         }
-        if (((String) s).equals((head.getU().getUserName()))) {
-            return head.getU();
+        if (((String) s).equals((head.getC().getMake()))) {
+            return head.getC();
         } else if (head.getNext()== null) {
             return null;
         }
         return get(s, this.head.getNext());
     }
 
-    private User get(Object s, UserNode n) {
+    private Car get(Object s, CarNode n) {
         if (n == null) {
             return null;
         }
-        if (((String) s).equals((n.getU().getUserName()))) {
-            return n.getU();
+        if (((String) s).equals((n.getC().getMake()))) {
+            return n.getC();
         } else if (n.getNext()== null) {
             return null;
         }
         return get(s, n.getNext());
     }
 
-    public void add(User u) throws Exception {
+    public void add(Car u) throws Exception {
         if (head == null) {
-            head = new UserNode(u);
+            head = new CarNode(u);
             tail = head;
         } else {
-            if (u.getUserName().equals(head.getU().getUserName())) {
-                throw new IllegalArgumentException("User Already Exists");
+            if (u.getMake().equals(head.getC().getMake())) {
+                throw new IllegalArgumentException("Car Already Exists");
             }
-            UserNode n = head;
-            UserNode previous = null;
+            CarNode n = head;
+            CarNode previous = null;
             while (n.getNext() != null) {
-                if (n.getU().getUserName().equals(u.getUserName())) {
-                    throw new IllegalArgumentException("User Already Exists");
+                if (n.getC().getMake().equals(u.getMake())) {
+                    throw new IllegalArgumentException("Car Already Exists");
                 }
                 n = n.getNext();
             }
-            UserNode newNode = new UserNode(u);
+            CarNode newNode = new CarNode(u);
             newNode.setPrevious(n);
             tail.setNext(newNode);
             tail = tail.getNext();
@@ -64,13 +64,13 @@ public class UserLinkedList {
     }
 
     public void remove(Object o) {
-        if (!(o instanceof User)) {
-            throw new ClassCastException("Expected a User, got " + o.getClass());
+        if (!(o instanceof Car)) {
+            throw new ClassCastException("Expected a Car, got " + o.getClass());
         }
         if (head == null) {
             return;
         }
-        if (((User) o).equals((head.getU()))) {
+        if (((Car) o).equals((head.getC()))) {
             head = head.getNext();
             if (head!=null) {
                 head.setPrevious(null);
@@ -81,11 +81,11 @@ public class UserLinkedList {
         remove(o, this.head.getNext());
 
     }
-    private void remove(Object o, UserNode n) {
+    private void remove(Object o, CarNode n) {
         if (n == null) {
             return;
         }
-        if (((User) o).equals((n.getU()))) {
+        if (((Car) o).equals((n.getC()))) {
             n.getPrevious().setNext(n.getNext());
             n.getNext().setPrevious(n.getPrevious());
             size--;
@@ -94,11 +94,11 @@ public class UserLinkedList {
         }
 
     }
-    public User next() {
+    public Car next() {
         return null;
     }
 
-    public User previous() {
+    public Car previous() {
         return null;
     }
 
@@ -107,9 +107,9 @@ public class UserLinkedList {
             return "Empty List";
         }
         StringBuilder returnBuilder = new StringBuilder();
-        UserNode n = head;
+        CarNode n = head;
         do {
-            returnBuilder.append(n.getU().getUserName() + "\n");
+            returnBuilder.append(n.getC().getMake() + "\n");
             n = n.getNext();
         } while(n != null);
         return returnBuilder.toString();
@@ -129,19 +129,34 @@ public class UserLinkedList {
 
     }
 
-    public int indexOf(User u) {
+    public int indexOf(Car u) {
         int returnvalue = 0;
         if (head ==null) {
             return -1;
         }
-        UserNode n = head;
+        CarNode n = head;
         while (n!=null) {
             returnvalue++;
-            if (n.getU().equals(u)) {
+            if (n.getC().equals(u)) {
                 return returnvalue;
             }
             n=n.getNext();
         }
         return -1;
+    }
+
+    public Car[] toArray() {
+        if (head == null) {
+            return null;
+        }
+        Car[] returnArray = new Car[size];
+        CarNode n = head;
+        int index = 0;
+        do {
+            returnArray[index] = n.getC();
+            n = n.getNext();
+            index++;
+        } while(n != null);
+        return returnArray;
     }
 }

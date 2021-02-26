@@ -14,7 +14,12 @@ public class SignUpMenu extends AbstractMenu {
         do{
             System.out.println("provide username");
             username = scan.nextLine();
-        } while(us.doesUsernameExist(username));
+            if (!us.doesUsernameExist(username)) {
+                break;
+            } else {
+                System.out.println("User Already Exists");
+            }
+        } while(true);
         System.out.println("provide password");
         String password = scan.nextLine();
         try {

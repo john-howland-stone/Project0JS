@@ -47,6 +47,6 @@ public class User {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getUserName());
+        return Objects.hash(getUserName(), isEmployee());
     }
 }

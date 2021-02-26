@@ -5,10 +5,6 @@ import com.Project0JS.util.UserService;
 
 import java.util.Scanner;
 
-/*
-Credit to Java Gym App for this class
- */
-
 public class LoginMenu extends AbstractMenu {
 
 
@@ -24,9 +20,13 @@ public class LoginMenu extends AbstractMenu {
             if (u == null || !u.getPassword().equals(password)) {
                 System.out.println("login failed");
             } else {
-                System.out.println("congratulations, have a great virtual workout");
-                //MemberMenu mm = new MemberMenu(u);
-                //mm.showMenu(scan);
+                System.out.println("Welcome " + u.getUserName());
+                if (u.isEmployee()) {
+                    //TODO create employee menu
+                } else {
+                    CustomerMenu cm = new CustomerMenu(u);
+                    cm.showMenu(scan);
+                }
                 break;
             }
         }
