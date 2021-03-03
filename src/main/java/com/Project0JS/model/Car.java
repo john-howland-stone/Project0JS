@@ -1,6 +1,7 @@
 package com.Project0JS.model;
 
 public class Car {
+    private int carID;
     private String make;
 
     private double price;
@@ -11,9 +12,12 @@ public class Car {
 
     private User owner;
 
-    public Car(String make, double price) {
+    public Car(String make) {
         this.make = make;
-        this.price = price;
+    }
+
+    public int getCarID() {
+        return carID;
     }
 
     public String getMake() {

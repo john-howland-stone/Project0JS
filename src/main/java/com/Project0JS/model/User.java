@@ -3,6 +3,7 @@ package com.Project0JS.model;
 import java.util.Objects;
 
 public class User {
+    private int userID;
     private String userName;
     private String password;
 
@@ -11,6 +12,7 @@ public class User {
     public User(String userName, String password) {
         this.userName = userName;
         this.password = password;
+        this.userID = 1; //TODO make this work with SQL
     }
 
     public String getUserName() {
@@ -37,16 +39,11 @@ public class User {
         isEmployee = employee;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return getUserName().equals(user.getUserName());
+    public int getUserID() {
+        return userID;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(getUserName(), isEmployee());
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 }

@@ -21,9 +21,10 @@ public class CustomerMenu extends AbstractMenu {
             System.out.println("view cars for sale, see my cars, or log out?");
             answer = scan.nextLine();
             if(answer.equalsIgnoreCase("view cars for sale")) {
-                //TODO implement sale menu
-            } else if(answer.equalsIgnoreCase("see my cars")) {
-                //TODO implement owned cards menu
+                SaleMenu sm = new SaleMenu(u);
+                sm.showMenu(scan);
+            } else if(answer.equalsIgnoreCase("view my cars")) {
+                System.out.println("Not yet implemented");
             }
         } while(!answer.equalsIgnoreCase("log out"));
     }
