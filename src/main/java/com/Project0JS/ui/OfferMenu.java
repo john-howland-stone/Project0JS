@@ -18,7 +18,7 @@ public class OfferMenu extends AbstractMenu {
                 answer = scan.nextLine();
                 if(answer.equalsIgnoreCase("accept offer")) {
                     System.out.println("Enter an offer index");
-                    int index = scan.nextInt();
+                    int index = UIUtility.enterInteger(scan);
                     if (OfferService.getInstance().isIndexInRange(index)) {
                         scan.nextLine();
                         OfferService.getInstance().acceptOffer(index);

@@ -22,7 +22,7 @@ public class SignUpMenu extends AbstractMenu {
         System.out.println("provide password");
         String password = scan.nextLine();
         UserService.getInstance().makeUser(username, password);
-        System.out.println("successfully made " + username);
+        System.out.println("successfully registered " + username);
         if (Driver.debug) {
             System.out.println(UserService.getInstance().toString());
         }
