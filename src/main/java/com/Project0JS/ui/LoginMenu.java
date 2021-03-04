@@ -16,8 +16,8 @@ public class LoginMenu extends AbstractMenu {
             String username = scan.nextLine();
             System.out.println("password: ");
             String password = scan.nextLine();
-            User u = UserService.findUserByUsername(username);
-            if (u == null || !u.getPassword().equals(password) && u.getUserID()==0) {
+            User u = UserService.getInstance().findUserByUsername(username);
+            if (u == null || !u.getPassword().equals(password) && !u.getUserName().equals("__LOT")) {
                 System.out.println("login failed");
             } else {
                 System.out.println("Welcome " + u.getUserName());

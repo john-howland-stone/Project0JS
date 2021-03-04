@@ -3,59 +3,92 @@ package com.Project0JS.util;
 import com.Project0JS.model.Car;
 
 public class CarService {
-    private static GenericArrayList<Car> cars = new GenericArrayList<Car>();
 
-    public static void addCar(String make) {
-        cars.add(new Car(make));
+    private static CarService instance;
+
+    public static CarService getInstance() {
+        if (instance == null) {
+            instance = new CarService();
+        }
+        return instance;
     }
 
-    public static String showCarsForSale() {
+    private CarService() {
+
+    }
+
+    private GenericArrayList<Car> cars = new GenericArrayList<>();
+
+    public void addCar(String make) {
+        int openkey = 0;
+        for (int i = 0; i < cars.getIndex(); i++) {
+            if (cars.get(i).getCarID() == openkey) {
+                openkey++;
+            }
+        }
+        cars.add(new Car(make, openkey));
+    }
+
+    public String showCarsForSale() {
         if (cars.getIndex() == 0) {
             return "No cars for sale";
         }
         StringBuilder returnbuilder = new StringBuilder("Cars for Sale: " + System.lineSeparator());
         for (int i = 0; i < cars.getIndex(); i++) {
-            if (cars.get(i).getOwnerID() == 0) {
-                returnbuilder.append("Index : " + i + " Make: " + cars.get(i).getMake());
+            Car operatedValue = cars.get(i);
+            if (operatedValue.getOwnerID().equals("__LOT")) {
+                returnbuilder.append("Index : ");
+                returnbuilder.append(i);
+                returnbuilder.append(" Make: ");
+                returnbuilder.append(operatedValue.getMake());
+                returnbuilder.append(System.lineSeparator());
             }
         }
         return returnbuilder.toString();
     }
-
-    public static String showCarsWithOffers() {
+/*
+    public String showCarsWithOffers() {
         if (cars.getIndex() == 0) {
             return "No cars with offers";
         }
         StringBuilder returnbuilder = new StringBuilder("Cars with Offers: " + System.lineSeparator());
         for (int i = 0; i < cars.getIndex(); i++) {
-            if (OfferService.DoesCarHaveOffer(cars.get(i).getCarID())) {
+            if (OfferService.getInstance().DoesCarHaveOffer(cars.get(i).getCarID())) {
                 returnbuilder.append("Index : " + i + " Make : " + cars.get(i).getMake());
             }
         }
         return returnbuilder.toString();
     }
+ */
 
-    public static String showAllCars() {
+
+    public String showAllCars() {
         if (cars.getIndex() < 1) {
             return "No Cars to list";
         }
         StringBuilder returnbuilder = new StringBuilder();
         for (int i = 0; i < cars.getIndex(); i++) {
-            returnbuilder.append("Index : " + i + " Make :" + cars.get(i).getMake() + "Has Offers: "
-                    + OfferService.DoesCarHaveOffer(cars.get(i).getCarID()) + System.lineSeparator());
+            Car operatedValue = cars.get(i);
+            returnbuilder.append("Index : ");
+            returnbuilder.append(i) ;
+            returnbuilder.append(" Make :");
+            returnbuilder.append(operatedValue.getMake());
+            returnbuilder.append(" Has Offers: ");
+            returnbuilder.append (OfferService.getInstance().DoesCarHaveOffer(operatedValue.getCarID()));
+            returnbuilder.append(System.lineSeparator());
         }
         return returnbuilder.toString();
     }
 
-    public static void makeOffer(int index, float price, int userId) {
+    public void makeOffer(int index, float price, String userName) {
         if (cars.getIndex() < index) {
             System.out.println("Invalid Car selection");
         } else {
-            OfferService.addOffer(cars.get(index).getCarID(), userId, price);
+            OfferService.getInstance().addOffer(cars.get(index).getCarID(), userName, price);
         }
     }
 
-    public static void removeCar(int index) {
+    public void removeCar(int index) {
         if (index > cars.getIndex()) {
             System.out.println("Invalid Car Index");
         } else {
@@ -63,11 +96,11 @@ public class CarService {
         }
     }
 
-    public static boolean isIndexInRange(int index) {
+    public boolean isIndexInRange(int index) {
         return index < cars.getIndex();
     }
 
-    public static Car getCarByID(int ID) {
+    public Car getCarByID(int ID) {
         for (int i = 0; i < cars.getIndex(); i++) {
             if (cars.get(i).getCarID() == ID) {
                 return cars.get(i);
@@ -76,17 +109,22 @@ public class CarService {
         return null;
     }
 
-    public static String showCarsbyOwner(int owner) {
+    public String showCarsbyOwner(String owner) {
         if (cars.getIndex() == 0) {
             return "No cars to list";
         }
         StringBuilder returnbuilder = new StringBuilder("Your cars: " + System.lineSeparator());
         boolean hasCars = false;
         for (int i = 0; i < cars.getIndex(); i++) {
-            if (cars.get(i).getOwnerID() == owner) {
-                returnbuilder.append("Index : " + i + " Make: " + cars.get(i).getMake()
-                        + "Payments remaining: " + (Car.getNumMonthsofPayments() - cars.get(i).getNumPaymentsMade())
-                        + System.lineSeparator());
+            if (cars.get(i).getOwnerID().equals(owner)) {
+                Car operatedValue = cars.get(i);
+                returnbuilder.append("Index : ");
+                returnbuilder.append(i);
+                returnbuilder.append(" Make: ");
+                returnbuilder.append(operatedValue.getMake());
+                returnbuilder.append("Payments remaining: ");
+                returnbuilder.append(operatedValue.getNumPaymentsRemaining());
+                returnbuilder.append(System.lineSeparator());
                 hasCars = true;
             }
         }
@@ -95,42 +133,58 @@ public class CarService {
         } else return "No cars to list";
     }
 
-    public static void MakePaymentbyID(int carID, int userID) {
-        for (int i = 0; i < cars.getIndex(); i++) {
-            if (cars.get(i).getCarID() == carID) {
-                if (cars.get(i).getOwnerID() == userID) {
-                    if (cars.get(i).getNumPaymentsMade() == Car.getNumMonthsofPayments() - 1) {
-                        System.out.println("Payments complete, enjoy your new car ( :");
-                        cars.remove(i);
-                    }
-                    cars.get(i).setNumPaymentsMade(cars.get(i).getNumPaymentsMade() + 1);
-                    System.out.println(Car.getNumMonthsofPayments() - cars.get(i).getNumPaymentsMade() + " Payments remaining");
-                } else {
-                    System.out.println("You are not the owner of the car yo entered");
-                }
-            }
+    public void MakePaymentbyIndex(int index) {
+        Car operatedValue = cars.get(index);
+        operatedValue.setNumPaymentsRemaining(operatedValue.getNumPaymentsRemaining() -1);
+        if (operatedValue.getNumPaymentsRemaining() == 0) {
+            System.out.println("Payments complete, enjoy your new car");
+            cars.remove(index);
+            return;
         }
+        System.out.println(operatedValue.getNumPaymentsRemaining() + " Payments remaining");
     }
 
-    public static String showCarswithPayments() {
+    public String showCarswithPayments() {
         if (cars.getIndex() == 0) {
             return "No cars to list";
         }
         StringBuilder returnbuilder = new StringBuilder("Cars With Payments: " + System.lineSeparator());
+        boolean match = false;
         for (int i = 0; i < cars.getIndex(); i++) {
-            if (cars.get(i).getOwnerID()!=0) {
-                returnbuilder.append("Index : " + i + " Make: " + cars.get(i).getMake()
-                        + "Owner : " + cars.get(i).getOwnerID()
-                        + " Payments remaining: " + (Car.getNumMonthsofPayments() - cars.get(i).getNumPaymentsMade())
-                        + System.lineSeparator());
+            if (!cars.get(i).getOwnerID().equals("__LOT")) {
+                Car operatedValue = cars.get(i);
+                match = true;
+                returnbuilder.append("Index : ");
+                returnbuilder.append(i);
+                returnbuilder.append(" Make: ");
+                returnbuilder.append(operatedValue.getMake());
+                returnbuilder.append(" Owner : ");
+                returnbuilder.append(operatedValue.getOwnerID());
+                returnbuilder.append(" Payments remaining: ");
+                returnbuilder.append(operatedValue.getNumPaymentsRemaining());
+                returnbuilder.append(System.lineSeparator());
             }
         }
-        return returnbuilder.toString();
+        if (match) {
+            return returnbuilder.toString();
+        }
+        return "No cars to display";
     }
-    public static double getMonthlyPaymentbyIndex(int index) {
-        return cars.get(index).getPrice() / Car.getNumMonthsofPayments();
+
+    public double getMonthlyPaymentbyIndex(int index) {
+        return (cars.get(index).getPrice()/3);
     }
-    public static int getCarIDbyIndex(int index) {
+/*
+    public int getCarIDbyIndex(int index) {
         return cars.get(index).getCarID();
+    }
+ */
+
+
+    @Override
+    public String toString() {
+        return "CarService{" +
+                "cars=" + cars +
+                '}';
     }
 }

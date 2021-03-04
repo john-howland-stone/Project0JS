@@ -3,16 +3,14 @@ package com.Project0JS.model;
 import java.util.Objects;
 
 public class User {
-    private int userID;
     private String userName;
     private String password;
 
     private boolean isEmployee = false;
 
-    public User(String userName, String password, int userID) {
+    public User(String userName, String password) {
         this.userName = userName;
         this.password = password;
-        this.userID = userID; //TODO make this work with SQL
     }
 
     public String getUserName() {
@@ -39,11 +37,12 @@ public class User {
         isEmployee = employee;
     }
 
-    public int getUserID() {
-        return userID;
-    }
-
-    public void setUserID(int userID) {
-        this.userID = userID;
+    @Override
+    public String toString() {
+        return "User{" +
+                "userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", isEmployee=" + isEmployee +
+                '}';
     }
 }

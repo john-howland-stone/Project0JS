@@ -15,7 +15,7 @@ public class CustomerMenu extends AbstractMenu {
 
     @Override
     public void showMenu(Scanner scan) {
-        String answer = "";
+        String answer;
         do {
             System.out.println("view cars for sale, view my cars, or log out?");
             answer = scan.nextLine();
@@ -23,16 +23,16 @@ public class CustomerMenu extends AbstractMenu {
                 SaleMenu sm = new SaleMenu(u);
                 sm.showMenu(scan);
             } else if(answer.equalsIgnoreCase("view my cars")) {
-                System.out.println(CarService.showCarsbyOwner(u.getUserID()));
-                if (!CarService.showCarsbyOwner(u.getUserID()).equalsIgnoreCase("No cars to list")) {
+                System.out.println(CarService.getInstance().showCarsbyOwner(u.getUserName()));
+                if (!CarService.getInstance().showCarsbyOwner(u.getUserName()).equalsIgnoreCase("No cars to list")) {
                     if (UIUtility.yOrN(scan,"Do you wish to make a payment?")) {
                         System.out.println("Enter the index of the car you wish to make a payment for");
                         int index = scan.nextInt();
-                        if (CarService.isIndexInRange(index)) {
+                        if (CarService.getInstance().isIndexInRange(index)) {
                             scan.nextLine();
-                            System.out.println("Amount due is:" + CarService.getMonthlyPaymentbyIndex(index));
+                            System.out.println("Amount due is:" + CarService.getInstance().getMonthlyPaymentbyIndex(index));
                             if (UIUtility.yOrN(scan,"Do you still wish to make a payment?")) {
-                                CarService.MakePaymentbyID(index,u.getUserID());
+                                CarService.getInstance().MakePaymentbyIndex(index);
                             } else {
                                 System.out.println("Transaction Aborted");
                             }

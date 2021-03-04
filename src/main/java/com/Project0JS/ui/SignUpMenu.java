@@ -1,5 +1,6 @@
 package com.Project0JS.ui;
 
+import com.Project0JS.util.Driver;
 import com.Project0JS.util.UserService;
 
 import java.util.Scanner;
@@ -8,11 +9,11 @@ public class SignUpMenu extends AbstractMenu {
 
     @Override
     public void showMenu(Scanner scan) {
-        String username = "";
+        String username;
         do{
             System.out.println("provide username");
             username = scan.nextLine();
-            if (!UserService.doesUsernameExist(username)) {
+            if (!UserService.getInstance().doesUsernameExist(username)) {
                 break;
             } else {
                 System.out.println("User Already Exists");
@@ -20,7 +21,10 @@ public class SignUpMenu extends AbstractMenu {
         } while(true);
         System.out.println("provide password");
         String password = scan.nextLine();
-        UserService.makeUser(username, password);
+        UserService.getInstance().makeUser(username, password);
         System.out.println("successfully made " + username);
+        if (Driver.debug) {
+            System.out.println(UserService.getInstance().toString());
+        }
     }
 }

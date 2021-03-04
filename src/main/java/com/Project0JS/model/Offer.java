@@ -2,11 +2,11 @@ package com.Project0JS.model;
 
 public class Offer {
     private int offer_id;
-    private int user_id;
+    private String user_id;
     private int car_id;
     private float price;
 
-    public Offer(int offer_id, int user_id, int car_id, float price) {
+    public Offer(int offer_id, int car_id, String user_id, float price) {
         this.offer_id = offer_id;
         this.user_id = user_id;
         this.car_id = car_id;
@@ -21,11 +21,11 @@ public class Offer {
         this.offer_id = offer_id;
     }
 
-    public int getUser_id() {
+    public String getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(int user_id) {
+    public void setUser_id(String user_id) {
         this.user_id = user_id;
     }
 
@@ -43,5 +43,15 @@ public class Offer {
 
     public void setPrice(float price) {
         this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        return "Offer{" +
+                "offer_id=" + offer_id +
+                ", user_id='" + user_id + '\'' +
+                ", car_id=" + car_id +
+                ", price=" + price +
+                '}';
     }
 }

@@ -3,17 +3,26 @@ package com.Project0JS.util;
 import com.Project0JS.model.User;
 
 public class UserService {
-    private static GenericArrayList<User> users = new GenericArrayList<User>();
-    public static void makeUser(String username, String password) {
-        int open_key = 1;
-        for (int i = 0; i < users.getIndex(); i++) {
-            if (users.get(i).getUserID() == open_key) {
-                open_key++;
-            }
+    private GenericArrayList<User> users = new GenericArrayList<>();
+
+    private static UserService instance;
+
+    public static UserService getInstance() {
+        if (instance == null) {
+            instance = new UserService();
         }
-        users.add(new User(username,password,open_key));
+        return instance;
     }
-    public static boolean doesUsernameExist(String username) {
+
+    private UserService() {
+
+    }
+
+    public void makeUser(String username, String password) {
+        users.add(new User(username, password));
+    }
+
+    public boolean doesUsernameExist(String username) {
         if (users.getIndex() < 1) {
             return false;
         }
@@ -25,7 +34,7 @@ public class UserService {
         return false;
     }
 
-    public static User findUserByUsername(String username) {
+    public User findUserByUsername(String username) {
         if (users.getIndex() < 1) {
             return null;
         }
@@ -35,5 +44,12 @@ public class UserService {
             }
         }
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return "UserService{" +
+                "users=" + users +
+                '}';
     }
 }

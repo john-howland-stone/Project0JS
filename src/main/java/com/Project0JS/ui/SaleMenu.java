@@ -3,6 +3,8 @@ package com.Project0JS.ui;
 import com.Project0JS.model.Car;
 import com.Project0JS.model.User;
 import com.Project0JS.util.CarService;
+import com.Project0JS.util.Driver;
+import com.Project0JS.util.OfferService;
 
 import java.util.Scanner;
 
@@ -16,9 +18,9 @@ public class SaleMenu extends AbstractMenu {
 
         @Override
         public void showMenu(Scanner scan) {
-            String answer = "";
-            System.out.println(CarService.showCarsForSale());
-            if (CarService.showCarsForSale().equalsIgnoreCase("No cars for sale")) {
+            String answer;
+            System.out.println(CarService.getInstance().showCarsForSale());
+            if (CarService.getInstance().showCarsForSale().equalsIgnoreCase("No cars for sale")) {
                 System.out.println("returning to previous menu");
             } else {
                 do {
@@ -27,16 +29,19 @@ public class SaleMenu extends AbstractMenu {
                     if(answer.equalsIgnoreCase("make an offer")) {
                         System.out.println("Enter a car index");
                         int index = scan.nextInt();
-                        if (CarService.isIndexInRange(index)) {
+                        if (CarService.getInstance().isIndexInRange(index)) {
                             scan.nextLine();
                             System.out.println("Enter a dollar amount without special symbols or commas");
                             float amount = scan.nextFloat();
                             scan.nextLine();
-                            CarService.makeOffer(index,amount, u.getUserID());
+                            CarService.getInstance().makeOffer(index,amount, u.getUserName());
                         } else {
                             System.out.println("Invalid Car Index");
                             scan.nextLine();
                         }
+                    }
+                    if (Driver.debug) {
+                        System.out.println(OfferService.getInstance().toString());
                     }
                 } while(!answer.equalsIgnoreCase("previous menu"));
             }

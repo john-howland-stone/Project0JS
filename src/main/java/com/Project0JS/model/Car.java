@@ -6,14 +6,13 @@ public class Car {
 
     private double price = -1.0;
 
-    private static final int numMonthsofPayments = 12;
+    private int numPaymentsRemaining = 3;
 
-    private int numPaymentsMade = 0;
+    private String ownerID = "__LOT";
 
-    private int ownerID = 0;
-
-    public Car(String make) {
+    public Car(String make, int carID) {
         this.make = make;
+        this.carID = carID;
     }
 
     public int getCarID() {
@@ -36,23 +35,30 @@ public class Car {
         this.price = price;
     }
 
-    public static int getNumMonthsofPayments() {
-        return numMonthsofPayments;
+    public int getNumPaymentsRemaining() {
+        return numPaymentsRemaining;
     }
 
-    public int getNumPaymentsMade() {
-        return numPaymentsMade;
+    public void setNumPaymentsRemaining(int numPaymentsRemaining) {
+        this.numPaymentsRemaining = numPaymentsRemaining;
     }
 
-    public void setNumPaymentsMade(int numPaymentsMade) {
-        this.numPaymentsMade = numPaymentsMade;
-    }
-
-    public int getOwnerID() {
+    public String getOwnerID() {
         return ownerID;
     }
 
-    public void setOwnerID(int ownerID) {
+    public void setOwnerID(String ownerID) {
         this.ownerID = ownerID;
+    }
+
+    @Override
+    public String toString() {
+        return "Car{" +
+                "carID=" + carID +
+                ", make='" + make + '\'' +
+                ", price=" + price +
+                ", numPaymentsMade=" + numPaymentsRemaining +
+                ", ownerID='" + ownerID + '\'' +
+                '}';
     }
 }

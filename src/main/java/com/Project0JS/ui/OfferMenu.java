@@ -1,6 +1,6 @@
 package com.Project0JS.ui;
 
-import com.Project0JS.util.CarService;
+import com.Project0JS.util.Driver;
 import com.Project0JS.util.OfferService;
 
 import java.util.Scanner;
@@ -8,9 +8,9 @@ import java.util.Scanner;
 public class OfferMenu extends AbstractMenu {
     @Override
     public void showMenu(Scanner scan) {
-        String answer = "";
-        System.out.println(OfferService.showAllOffers());
-        if (OfferService.showAllOffers().equalsIgnoreCase("No Offers to list")) {
+        String answer;
+        System.out.println(OfferService.getInstance().showAllOffers());
+        if (OfferService.getInstance().showAllOffers().equalsIgnoreCase("No Offers to list")) {
             System.out.println("returning to previous menu");
         } else {
             do {
@@ -19,9 +19,9 @@ public class OfferMenu extends AbstractMenu {
                 if(answer.equalsIgnoreCase("accept offer")) {
                     System.out.println("Enter an offer index");
                     int index = scan.nextInt();
-                    if (OfferService.isIndexInRange(index)) {
+                    if (OfferService.getInstance().isIndexInRange(index)) {
                         scan.nextLine();
-                        OfferService.acceptOffer(index);
+                        OfferService.getInstance().acceptOffer(index);
                     } else {
                         System.out.println("Invalid Offer Index");
                         scan.nextLine();
@@ -30,13 +30,16 @@ public class OfferMenu extends AbstractMenu {
                 else if(answer.equalsIgnoreCase("reject offer")) {
                     System.out.println("Enter an offer index");
                     int index = scan.nextInt();
-                    if (OfferService.isIndexInRange(index)) {
+                    if (OfferService.getInstance().isIndexInRange(index)) {
                         scan.nextLine();
-                        OfferService.rejectOffer(index);
+                        OfferService.getInstance().rejectOffer(index);
                     } else {
                         System.out.println("Invalid Offer Index");
                         scan.nextLine();
                     }
+                }
+                if (Driver.debug) {
+                    System.out.println(OfferService.getInstance().toString());
                 }
             } while(!answer.equalsIgnoreCase("previous menu"));
         }

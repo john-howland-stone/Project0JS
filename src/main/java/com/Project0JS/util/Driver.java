@@ -6,7 +6,9 @@ import com.Project0JS.ui.SignUpMenu;
 import java.util.Scanner;
 
 public class Driver {
-    //private final boolean debug = false;
+
+    public static final boolean debug = true;
+
     public static void main(String [] args) {
 
         Scanner scan = new Scanner(System.in);

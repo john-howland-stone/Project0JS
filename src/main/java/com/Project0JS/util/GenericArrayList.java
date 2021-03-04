@@ -9,7 +9,7 @@ public class GenericArrayList<T> {
 
     private static final int SIZE_FACTOR = 5;
 
-    private T data[];
+    private T[] data;
 
     private int index;
 
@@ -31,10 +31,8 @@ public class GenericArrayList<T> {
 
     private void increaseSizeAndReallocate() {
         this.size = this.size + SIZE_FACTOR;
-        T newData[] = (T[])new Object[this.size];
-        for (int i = 0; i < data.length; i++) {
-            newData[i] = data[i];
-        }
+        T[] newData = (T[])new Object[this.size];
+        System.arraycopy(data, 0, newData, 0, data.length);
         this.data = newData;
     }
 
@@ -43,18 +41,28 @@ public class GenericArrayList<T> {
     }
 
     public void remove(int i) {
-        for (int x = i; x < this.data.length - 1; x++) {
-            data[x] = data[x + 1];
-        }
+        if (this.data.length - 1 - i >= 0) System.arraycopy(data, i + 1, data, i, this.data.length - 1 - i);
         this.index--;
     }
 
-    public int getSize() {
+
+    /*
+        public int getSize() {
         return size;
     }
+     */
 
     public int getIndex() {
         return index;
+    }
+
+    @Override
+    public String toString() {
+        return "GenericArrayList{" +
+                "data=" + Arrays.toString(data) +
+                ", index=" + index +
+                ", size=" + size +
+                '}';
     }
 }
 
