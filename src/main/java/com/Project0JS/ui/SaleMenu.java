@@ -1,5 +1,6 @@
 package com.Project0JS.ui;
 
+import com.Project0JS.model.Car;
 import com.Project0JS.model.User;
 import com.Project0JS.util.CarService;
 
@@ -15,28 +16,30 @@ public class SaleMenu extends AbstractMenu {
 
         @Override
         public void showMenu(Scanner scan) {
-            int index = 0;
-            CarService cs = new CarService();
             String answer = "";
-            do {
-                cs.showCarsForSale(index);
-                System.out.println("next page, make offer or previous menu");
-                answer = scan.nextLine();
-                if(answer.equalsIgnoreCase("next page")) {
-                    index +=4;
-                    if (cs.showCarsForSale(index).equals("No more cars to list")) {
-                        index = 0;
+            System.out.println(CarService.showCarsForSale());
+            if (CarService.showCarsForSale().equalsIgnoreCase("No cars for sale")) {
+                System.out.println("returning to previous menu");
+            } else {
+                do {
+                    System.out.println("make an offer or previous menu");
+                    answer = scan.nextLine();
+                    if(answer.equalsIgnoreCase("make an offer")) {
+                        System.out.println("Enter a car index");
+                        int index = scan.nextInt();
+                        if (CarService.isIndexInRange(index)) {
+                            scan.nextLine();
+                            System.out.println("Enter a dollar amount without special symbols or commas");
+                            float amount = scan.nextFloat();
+                            scan.nextLine();
+                            CarService.makeOffer(index,amount, u.getUserID());
+                        } else {
+                            System.out.println("Invalid Car Index");
+                            scan.nextLine();
+                        }
                     }
-                } else if(answer.equalsIgnoreCase("make an offer")) {
-                    System.out.println("Enter a car index");
-                    int offerindex = scan.nextInt();
-                    scan.nextLine();
-                    System.out.println("Enter a dollar amount without special symbols or commas");
-                    float amount = scan.nextFloat();
-                    scan.nextLine();
-                    cs.makeOffer(index,amount);
-                    System.out.println( offerindex + amount + "Not Yet Implemented");
-                }
-            } while(!answer.equalsIgnoreCase("previous menu"));
+                } while(!answer.equalsIgnoreCase("previous menu"));
+            }
+
         }
 }

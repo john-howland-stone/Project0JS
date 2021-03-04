@@ -16,13 +16,15 @@ public class LoginMenu extends AbstractMenu {
             String username = scan.nextLine();
             System.out.println("password: ");
             String password = scan.nextLine();
-            User u = new UserService().findUserByUsername(username);
-            if (u == null || !u.getPassword().equals(password)) {
+            User u = UserService.findUserByUsername(username);
+            if (u == null || !u.getPassword().equals(password) && u.getUserID()==0) {
                 System.out.println("login failed");
             } else {
                 System.out.println("Welcome " + u.getUserName());
-                if (u.isEmployee()) {
-                    //TODO create employee menu
+                //if (u.isEmployee()) {
+                if (u.getUserName().equalsIgnoreCase("Employee")) { //TODO: Remove this when DB is set up
+                    EmployeeMenu em = new EmployeeMenu(u);
+                    em.showMenu(scan);
                 } else {
                     CustomerMenu cm = new CustomerMenu(u);
                     cm.showMenu(scan);

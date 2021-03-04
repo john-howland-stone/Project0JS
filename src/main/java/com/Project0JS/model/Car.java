@@ -4,13 +4,13 @@ public class Car {
     private int carID;
     private String make;
 
-    private double price;
+    private double price = -1.0;
 
     private static final int numMonthsofPayments = 12;
 
     private int numPaymentsMade = 0;
 
-    private User owner;
+    private int ownerID = 0;
 
     public Car(String make) {
         this.make = make;
@@ -48,11 +48,11 @@ public class Car {
         this.numPaymentsMade = numPaymentsMade;
     }
 
-    public User getOwner() {
-        return owner;
+    public int getOwnerID() {
+        return ownerID;
     }
 
-    public void setOwner(User owner) {
-        this.owner = owner;
+    public void setOwnerID(int ownerID) {
+        this.ownerID = ownerID;
     }
 }

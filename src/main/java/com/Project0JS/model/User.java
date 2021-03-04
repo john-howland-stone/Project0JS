@@ -9,10 +9,10 @@ public class User {
 
     private boolean isEmployee = false;
 
-    public User(String userName, String password) {
+    public User(String userName, String password, int userID) {
         this.userName = userName;
         this.password = password;
-        this.userID = 1; //TODO make this work with SQL
+        this.userID = userID; //TODO make this work with SQL
     }
 
     public String getUserName() {

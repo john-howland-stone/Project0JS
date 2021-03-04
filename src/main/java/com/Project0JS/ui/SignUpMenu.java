@@ -8,12 +8,11 @@ public class SignUpMenu extends AbstractMenu {
 
     @Override
     public void showMenu(Scanner scan) {
-        UserService us = new UserService();
         String username = "";
         do{
             System.out.println("provide username");
             username = scan.nextLine();
-            if (!us.doesUsernameExist(username)) {
+            if (!UserService.doesUsernameExist(username)) {
                 break;
             } else {
                 System.out.println("User Already Exists");
@@ -21,7 +20,7 @@ public class SignUpMenu extends AbstractMenu {
         } while(true);
         System.out.println("provide password");
         String password = scan.nextLine();
-        us.makeUser(username, password);
+        UserService.makeUser(username, password);
         System.out.println("successfully made " + username);
     }
 }
