@@ -15,6 +15,14 @@ public class Car {
         this.carID = carID;
     }
 
+    public Car(int carID,String make ,float price,int numPaymentsRemaining,String ownerID) {
+        this.make = make;
+        this.carID = carID;
+        this.price = price;
+        this.numPaymentsRemaining = numPaymentsRemaining;
+        this.ownerID = ownerID;
+    }
+
     public int getCarID() {
         return carID;
     }

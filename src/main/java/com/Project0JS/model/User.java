@@ -13,6 +13,12 @@ public class User {
         this.password = password;
     }
 
+    public User(String userName, String password, boolean isEmployee) {
+        this.userName = userName;
+        this.password = password;
+        this.isEmployee = isEmployee;
+    }
+
     public String getUserName() {
         return userName;
     }

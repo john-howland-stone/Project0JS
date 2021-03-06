@@ -6,7 +6,7 @@ public class Offer {
     private int car_id;
     private float price;
 
-    public Offer(int offer_id, int car_id, String user_id, float price) {
+    public Offer(int offer_id, String user_id,int car_id, float price) {
         this.offer_id = offer_id;
         this.user_id = user_id;
         this.car_id = car_id;

@@ -19,18 +19,41 @@ public class CarService {
 
     private GenericArrayList<Car> cars = new GenericArrayList<>();
 
+/*    public GenericArrayList<Car> getCars() {
+        return cars;
+    }*/
+
+    public void setCars(GenericArrayList<Car> cars) {
+        this.cars = cars;
+    }
+
     public void addCar(String make) {
-        int openkey = 0;
-        for (int i = 0; i < cars.getIndex(); i++) {
-            if (cars.get(i).getCarID() == openkey) {
-                openkey++;
+        int i;
+        for (i = 0; i < cars.getIndex()+1; i++) {
+            boolean match = false;
+            for (int j = 0; j < cars.getIndex(); j++) {
+                if (i == j) {
+                    match = true;
+                    break;
+                }
+            }
+            if (!match){
+                break;
             }
         }
-        cars.add(new Car(make, openkey));
+        Car addCar = new Car(make, i);
+        cars.add(addCar);
+        CarDao.getInstance().create(addCar);
     }
 
     public String showCarsForSale() {
-        if (cars.getIndex() == 0) {
+        boolean carsExistForSale = false;
+        for(int i= 0; i < cars.getIndex(); i++) {
+            if (cars.get(i).getOwnerID().equals("__LOT")) {
+                carsExistForSale=true;
+            }
+        }
+        if (!carsExistForSale) {
             return "No cars for sale";
         }
         StringBuilder returnbuilder = new StringBuilder("Cars for Sale: " + System.lineSeparator());
@@ -71,8 +94,10 @@ public class CarService {
             Car operatedValue = cars.get(i);
             returnbuilder.append("Index : ");
             returnbuilder.append(i) ;
-            returnbuilder.append(" Make :");
+            returnbuilder.append(" Make : ");
             returnbuilder.append(operatedValue.getMake());
+            returnbuilder.append(" Owner :");
+            returnbuilder.append(operatedValue.getOwnerID());
             returnbuilder.append(" Has Offers: ");
             returnbuilder.append (OfferService.getInstance().DoesCarHaveOffer(operatedValue.getCarID()));
             returnbuilder.append(System.lineSeparator());
@@ -92,6 +117,9 @@ public class CarService {
         if (index > cars.getIndex()) {
             System.out.println("Invalid Car Index");
         } else {
+            OfferDao.getInstance().RemoveOffersOnCar(cars.get(index).getCarID());
+            CarDao.getInstance().remove(cars.get(index).getCarID());
+            OfferService.getInstance().RemoveOffersOnCar(cars.get(index).getCarID());
             cars.remove(index);
         }
     }
@@ -122,6 +150,7 @@ public class CarService {
                 returnbuilder.append(i);
                 returnbuilder.append(" Make: ");
                 returnbuilder.append(operatedValue.getMake());
+                returnbuilder.append(System.lineSeparator());
                 returnbuilder.append("Payments remaining: ");
                 returnbuilder.append(operatedValue.getNumPaymentsRemaining());
                 returnbuilder.append(System.lineSeparator());
@@ -138,10 +167,12 @@ public class CarService {
         operatedValue.setNumPaymentsRemaining(operatedValue.getNumPaymentsRemaining() -1);
         if (operatedValue.getNumPaymentsRemaining() == 0) {
             System.out.println("Payments complete, enjoy your new car");
+            CarDao.getInstance().remove(operatedValue.getCarID());
             cars.remove(index);
             return;
         }
-        System.out.println(operatedValue.getNumPaymentsRemaining() + " Payments remaining");
+        System.out.println(operatedValue.getNumPaymentsRemaining() + " Payment(s) remaining");
+        CarDao.getInstance().update(operatedValue);
     }
 
     public String showCarswithPayments() {
@@ -162,6 +193,8 @@ public class CarService {
                 returnbuilder.append(operatedValue.getOwnerID());
                 returnbuilder.append(" Payments remaining: ");
                 returnbuilder.append(operatedValue.getNumPaymentsRemaining());
+                returnbuilder.append(" Balance remaining: ");
+                returnbuilder.append(CarService.getInstance().getMonthlyPaymentbyIndex(i));
                 returnbuilder.append(System.lineSeparator());
             }
         }

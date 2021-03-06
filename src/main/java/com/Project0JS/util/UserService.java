@@ -5,6 +5,14 @@ import com.Project0JS.model.User;
 public class UserService {
     private GenericArrayList<User> users = new GenericArrayList<>();
 
+    public GenericArrayList<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(GenericArrayList<User> users) {
+        this.users = users;
+    }
+
     private static UserService instance;
 
     public static UserService getInstance() {
@@ -20,6 +28,12 @@ public class UserService {
 
     public void makeUser(String username, String password) {
         users.add(new User(username, password));
+        UserDao.getInstance().create(new User(username,password));
+    }
+
+    public void makeUser(String username, String password,boolean isEmployee) {
+        users.add(new User(username, password));
+        UserDao.getInstance().create(new User(username,password));
     }
 
     public boolean doesUsernameExist(String username) {

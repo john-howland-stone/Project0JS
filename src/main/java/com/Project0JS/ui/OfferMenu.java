@@ -19,24 +19,26 @@ public class OfferMenu extends AbstractMenu {
                 if(answer.equalsIgnoreCase("accept offer")) {
                     System.out.println("Enter an offer index");
                     int index = UIUtility.enterInteger(scan);
-                    if (OfferService.getInstance().isIndexInRange(index)) {
+                    if (OfferService.getInstance().doesOfferExistAtIndex(index)) {
                         scan.nextLine();
                         OfferService.getInstance().acceptOffer(index);
                     } else {
                         System.out.println("Invalid Offer Index");
                         scan.nextLine();
                     }
+                    System.out.println(OfferService.getInstance().showAllOffers());
                 }
                 else if(answer.equalsIgnoreCase("reject offer")) {
                     System.out.println("Enter an offer index");
                     int index = scan.nextInt();
-                    if (OfferService.getInstance().isIndexInRange(index)) {
+                    if (OfferService.getInstance().doesOfferExistAtIndex(index)) {
                         scan.nextLine();
                         OfferService.getInstance().rejectOffer(index);
                     } else {
                         System.out.println("Invalid Offer Index");
                         scan.nextLine();
                     }
+                    System.out.println(OfferService.getInstance().showAllOffers());
                 }
                 if (Driver.debug) {
                     System.out.println(OfferService.getInstance().toString());

@@ -21,8 +21,7 @@ public class LoginMenu extends AbstractMenu {
                 System.out.println("login failed");
             } else {
                 System.out.println("Welcome " + u.getUserName());
-                //if (u.isEmployee()) {
-                if (u.getUserName().equalsIgnoreCase("Employee")) { //TODO: Remove this when DB is set up
+                if (u.isEmployee()) {
                     EmployeeMenu em = new EmployeeMenu(u);
                     em.showMenu(scan);
                 } else {

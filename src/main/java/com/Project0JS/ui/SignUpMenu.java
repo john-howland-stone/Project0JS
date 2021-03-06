@@ -1,6 +1,8 @@
 package com.Project0JS.ui;
 
+import com.Project0JS.model.User;
 import com.Project0JS.util.Driver;
+import com.Project0JS.util.UserDao;
 import com.Project0JS.util.UserService;
 
 import java.util.Scanner;

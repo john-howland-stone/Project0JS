@@ -11,6 +11,14 @@ public class Driver {
 
     public static void main(String [] args) {
 
+        UserService.getInstance().setUsers(UserDao.getInstance().getAll());
+        CarService.getInstance().setCars(CarDao.getInstance().getAll());
+        OfferService.getInstance().setOffers(OfferDao.getInstance().getAll());
+        if (Driver.debug) {
+            System.out.println(UserService.getInstance());
+            System.out.println(CarService.getInstance());
+            System.out.println(OfferService.getInstance());
+        }
         Scanner scan = new Scanner(System.in);
         SignUpMenu sm = new SignUpMenu();
         LoginMenu lm = new LoginMenu();

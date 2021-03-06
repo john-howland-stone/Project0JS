@@ -36,7 +36,8 @@ public class EmployeeMenu extends AbstractMenu {
             } else if(answer.equalsIgnoreCase("view payments")) {
                 System.out.println(CarService.getInstance().showCarswithPayments());
             } else if(answer.equalsIgnoreCase("remove car")) {
-                System.out.println("Enter Car ID to be removed");
+                System.out.println(CarService.getInstance().showAllCars());
+                System.out.println("Enter Car index to be removed");
                 CarService.getInstance().removeCar(scan.nextInt());
                 scan.nextLine();
             }

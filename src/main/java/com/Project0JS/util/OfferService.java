@@ -19,41 +19,68 @@ public class OfferService {
 
     }
 
-    public  void rejectOffer(int index) {
+    public GenericArrayList<Offer> getOffers() {
+        return offers;
+    }
+
+    public void setOffers(GenericArrayList<Offer> offers) {
+        this.offers = offers;
+    }
+
+    public void rejectOffer(int index) {
+        OfferDao.getInstance().remove(offers.get(index).getOfferId());
         offers.remove(index);
     }
 
-    public  void addOffer(int car_id, String user_id, float price) {
-        int open_key = 0;
-        for (int i = 0; i < offers.getIndex(); i++) {
-            if (offers.get(i).getOfferId() == open_key) {
-                open_key++;
-            }
-            if ((offers.get(i).getUser_id().equals(user_id)) && (offers.get(i).getCar_id()==car_id)) {
-                offers.get(i).setPrice(price);
+    public void addOffer(int car_id, String user_id, float price) {
+        int i;
+        for (i = 0; i < offers.getIndex(); i++) {
+            Offer existingOffer = offers.get(i);
+            if (existingOffer!=null && existingOffer.getUser_id().equals(user_id) && existingOffer.getCar_id() == car_id) {
+                existingOffer.setPrice(price);
+                OfferDao.getInstance().update(existingOffer);
                 System.out.println("Offer Updated");
                 return;
             }
         }
-        offers.add(new Offer(open_key, car_id, user_id, price));
+        for (i = 0; i < offers.getIndex() + 1; i++) {
+            boolean match = false;
+            for (int j = 0; j < offers.getIndex(); j++) {
+                if (i == j) {
+                    match = true;
+                    break;
+                }
+            }
+            if (!match) {
+                break;
+            }
+        }
+        Offer addedOffer = new Offer(i, user_id, car_id, price);
+        offers.add(addedOffer);
+        OfferDao.getInstance().create(addedOffer);
+
         System.out.println("Offer Made");
     }
-    public  boolean DoesCarHaveOffer(int carID) {
+
+    public boolean DoesCarHaveOffer(int carID) {
         for (int i = 0; i < offers.getIndex(); i++) {
+            System.out.println(i);
             if (offers.get(i).getCar_id() == carID) {
                 return true;
             }
         }
         return false;
     }
-    public  void RemoveOffersOnCar(int carID) {
+
+    public void RemoveOffersOnCar(int carID) {
         for (int i = 0; i < offers.getIndex(); i++) {
             if (offers.get(i).getCar_id() == carID) {
                 offers.remove(i);
             }
         }
     }
-    public  String showAllOffers () {
+
+    public String showAllOffers() {
         if (offers.getIndex() < 1) {
             return "No Offers to list";
         }
@@ -61,7 +88,7 @@ public class OfferService {
         for (int i = 0; i < offers.getIndex(); i++) {
             Offer operatedValue = offers.get(i);
             returnbuilder.append("Index :");
-            returnbuilder.append(operatedValue.getOfferId());
+            returnbuilder.append(i);
             returnbuilder.append(System.lineSeparator());
             returnbuilder.append("User ID: ");
             returnbuilder.append(operatedValue.getUser_id());
@@ -69,22 +96,27 @@ public class OfferService {
             returnbuilder.append("Car ID: ");
             returnbuilder.append(operatedValue.getCar_id());
             returnbuilder.append(System.lineSeparator());
-            returnbuilder.append( "Make: ");
+            returnbuilder.append("Make: ");
             returnbuilder.append(System.lineSeparator());
             returnbuilder.append(CarService.getInstance().getCarByID(operatedValue.getCar_id()).getMake());
             returnbuilder.append(System.lineSeparator());
             returnbuilder.append("Bid : ");
             returnbuilder.append(operatedValue.getPrice());
+            returnbuilder.append(System.lineSeparator());
         }
         return returnbuilder.toString();
     }
-    public  boolean isIndexInRange(int index) {
-        return index < offers.getIndex();
+
+    public boolean doesOfferExistAtIndex(int index) {
+        return offers.get(index) !=null;
     }
-    public  void acceptOffer(int index) {
+
+    public void acceptOffer(int index) {
         Car car = CarService.getInstance().getCarByID(offers.get(index).getCar_id());
-        car.setOwnerID(offers.get(index).getUser_id());
+        String newowner = offers.get(index).getUser_id();
+        car.setOwnerID(newowner);
         car.setPrice(offers.get(index).getPrice());
+        OfferDao.getInstance().AcceptOffer(newowner, car.getCarID(),offers.get(index).getPrice());
         RemoveOffersOnCar(car.getCarID());
     }
 
