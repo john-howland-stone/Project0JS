@@ -3,8 +3,6 @@ package com.Project0JS.ui;
 import com.Project0JS.model.User;
 import com.Project0JS.util.CarService;
 import com.Project0JS.util.Driver;
-import com.Project0JS.util.OfferService;
-import com.Project0JS.util.UserService;
 
 import java.util.Scanner;
 
@@ -38,7 +36,12 @@ public class EmployeeMenu extends AbstractMenu {
             } else if(answer.equalsIgnoreCase("remove car")) {
                 System.out.println(CarService.getInstance().showAllCars());
                 System.out.println("Enter Car index to be removed");
-                CarService.getInstance().removeCar(scan.nextInt());
+                int index = UIUtility.enterInteger(scan);
+                if (CarService.getInstance().doesCarExistAtIndex(index)) {
+                    CarService.getInstance().removeCar(index);
+                } else {
+                    System.out.println("Invalid Car Index");
+                }
                 scan.nextLine();
             }
         } while(!answer.equalsIgnoreCase("log out"));

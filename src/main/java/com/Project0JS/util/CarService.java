@@ -28,20 +28,17 @@ public class CarService {
     }
 
     public void addCar(String make) {
-        int i;
-        for (i = 0; i < cars.getIndex()+1; i++) {
-            boolean match = false;
-            for (int j = 0; j < cars.getIndex(); j++) {
-                if (i == j) {
-                    match = true;
-                    break;
-                }
-            }
-            if (!match){
-                break;
+        int index = 0;
+        int i = 0;
+        while (i < cars.getIndex()) {
+            if (cars.get(i).getCarID()==index) {
+                index++;
+                i = 0;
+            } else {
+                i++;
             }
         }
-        Car addCar = new Car(make, i);
+        Car addCar = new Car(make, index);
         cars.add(addCar);
         CarDao.getInstance().create(addCar);
     }
@@ -124,10 +121,12 @@ public class CarService {
         }
     }
 
-    public boolean isIndexInRange(int index) {
-        return index < cars.getIndex();
+    public boolean doesCarExistAtIndex(int index) {
+        return cars.get(index)!=null;
     }
-
+    public boolean doesCarOnwedByUserExistAtIndex(int index,String username) {
+        return cars.get(index)!=null && cars.get(index).getOwnerID().equals(username);
+    }
     public Car getCarByID(int ID) {
         for (int i = 0; i < cars.getIndex(); i++) {
             if (cars.get(i).getCarID() == ID) {

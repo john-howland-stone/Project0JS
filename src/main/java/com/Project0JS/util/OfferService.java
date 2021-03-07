@@ -43,19 +43,17 @@ public class OfferService {
                 return;
             }
         }
-        for (i = 0; i < offers.getIndex() + 1; i++) {
-            boolean match = false;
-            for (int j = 0; j < offers.getIndex(); j++) {
-                if (i == j) {
-                    match = true;
-                    break;
-                }
-            }
-            if (!match) {
-                break;
+        int index = 0;
+        i = 0;
+        while (i < offers.getIndex()) {
+            if (offers.get(i).getOfferId()==index) {
+                index++;
+                i = 0;
+            } else {
+                i++;
             }
         }
-        Offer addedOffer = new Offer(i, user_id, car_id, price);
+        Offer addedOffer = new Offer(index, user_id, car_id, price);
         offers.add(addedOffer);
         OfferDao.getInstance().create(addedOffer);
 
@@ -76,6 +74,7 @@ public class OfferService {
         for (int i = 0; i < offers.getIndex(); i++) {
             if (offers.get(i).getCar_id() == carID) {
                 offers.remove(i);
+                i = 0;
             }
         }
     }

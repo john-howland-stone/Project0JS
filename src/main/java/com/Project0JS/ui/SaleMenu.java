@@ -28,12 +28,16 @@ public class SaleMenu extends AbstractMenu {
                     if(answer.equalsIgnoreCase("make an offer")) {
                         System.out.println("Enter a car index");
                         int index = UIUtility.enterInteger(scan);
-                        if (CarService.getInstance().isIndexInRange(index)) {
+                        if (CarService.getInstance().doesCarExistAtIndex(index)) {
                             scan.nextLine();
                             System.out.println("Enter a dollar amount without special symbols or commas");
                             float amount = UIUtility.enterFloat(scan);
                             scan.nextLine();
-                            CarService.getInstance().makeOffer(index,amount, u.getUserName());
+                            if (amount > 0.0) {
+                                CarService.getInstance().makeOffer(index,amount, u.getUserName());
+                            } else {
+                                System.out.println("Cannot make an offer of 0 or less");
+                            }
                         } else {
                             System.out.println("Invalid Car Index");
                             scan.nextLine();

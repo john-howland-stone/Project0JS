@@ -28,7 +28,7 @@ public class CustomerMenu extends AbstractMenu {
                     if (UIUtility.yOrN(scan,"Do you wish to make a payment?")) {
                         System.out.println("Enter the index of the car you wish to make a payment for");
                         int index = UIUtility.enterInteger(scan);
-                        if (CarService.getInstance().isIndexInRange(index)) {
+                        if (CarService.getInstance().doesCarExistAtIndex(index)) {
                             scan.nextLine();
                             System.out.println("Amount due is:" + CarService.getInstance().getMonthlyPaymentbyIndex(index));
                             if (UIUtility.yOrN(scan,"Do you still wish to make a payment?")) {
