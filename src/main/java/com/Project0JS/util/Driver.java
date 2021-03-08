@@ -2,12 +2,16 @@ package com.Project0JS.util;
 
 import com.Project0JS.ui.LoginMenu;
 import com.Project0JS.ui.SignUpMenu;
+import com.enterprise.model.MetaTestData;
+import com.enterprise.util.HashMap;
+import com.enterprise.util.TestDiscovery;
 
+import java.lang.reflect.Method;
 import java.util.Scanner;
 
 public class Driver {
 
-    public static final boolean debug = true;
+    public static final boolean debug = false;
 
     public static void main(String [] args) {
 
@@ -18,6 +22,15 @@ public class Driver {
             System.out.println(UserService.getInstance());
             System.out.println(CarService.getInstance());
             System.out.println(OfferService.getInstance());
+            HashMap<Method, MetaTestData> resultmap = null;
+            try {
+                resultmap = new TestDiscovery().runAndStoreTestInformation();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            finally {
+                System.out.println(resultmap);
+            }
         }
         Scanner scan = new Scanner(System.in);
         SignUpMenu sm = new SignUpMenu();
